@@ -40,31 +40,35 @@ export function GameHubNavMenu({
 
   if (variant === "mobile") {
     return (
-      <div className="space-y-3 border-b border-border/60 pb-4">
+      <div className="overflow-hidden rounded-xl border border-border/80 bg-surface/30">
         <Link
           href={hubHref}
-          className="text-sm font-semibold text-gold"
+          className="flex min-h-11 items-center justify-between px-3 text-sm font-semibold text-gold transition hover:bg-surface/80"
           onClick={onNavigate}
         >
           {label}
+          <span aria-hidden>{locale === "ar" ? "←" : "→"}</span>
         </Link>
-        <div className="space-y-2 ps-2">
+        <div className="space-y-2 border-t border-border/60 px-3 py-3">
           {games.map((game) => (
-            <div key={game.id}>
+            <div
+              key={game.id}
+              className="rounded-lg bg-background/60 px-3 py-2.5"
+            >
               <p className="text-sm font-medium text-foreground">{game.title}</p>
-              <p className="mt-0.5 text-xs leading-relaxed text-muted">
+              <p className="mt-1 text-xs leading-relaxed text-muted">
                 {game.summary}
               </p>
               {game.href ? (
                 <Link
                   href={game.href}
-                  className="mt-1 inline-block text-xs font-semibold text-gold"
+                  className="mt-2 inline-flex text-xs font-semibold text-gold"
                   onClick={onNavigate}
                 >
                   {game.cta ?? gameHub.viewCombatGuide} →
                 </Link>
               ) : (
-                <span className="mt-1 inline-block text-[10px] uppercase tracking-wide text-muted-dark">
+                <span className="mt-2 inline-flex text-[10px] uppercase tracking-wide text-muted-dark">
                   {gameHub.inAppBadge}
                 </span>
               )}

@@ -92,6 +92,13 @@ export const arContent: SiteContent = {
       enterWorld: "ادخل إلى العالم",
       enterWorldShort: "ادخل",
     },
+    mobileMenu: {
+      open: "فتح القائمة",
+      close: "إغلاق القائمة",
+      navigation: "التنقل",
+      account: "الحساب",
+      language: "اللغة",
+    },
     footer: {
       product: [
         { href: "/game-hub", label: "مركز الألعاب" },

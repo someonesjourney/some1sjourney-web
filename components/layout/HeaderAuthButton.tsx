@@ -24,30 +24,30 @@ export function HeaderAuthButton({
   const isMobile = variant === "mobile";
 
   const shellClass = isMobile
-    ? "flex w-full flex-col gap-2.5"
+    ? "flex w-full flex-col gap-2"
     : "hidden items-center gap-1.5 md:flex lg:gap-2";
 
-  const signInClass = `${btnBase} ${
+  const signInClass = `${btnBase} w-full ${
     isMobile
-      ? "border border-border px-4 py-2 text-sm font-medium text-foreground hover:border-border-gold hover:text-gold"
+      ? "min-h-11 border border-border px-4 py-2.5 text-sm font-medium text-foreground hover:border-border-gold hover:text-gold"
       : "border border-border px-2.5 py-1.5 text-xs font-medium text-foreground hover:border-border-gold hover:text-gold lg:px-3.5 lg:py-2 lg:text-sm"
   }`;
 
-  const signUpClass = `${btnBase} ${
+  const signUpClass = `${btnBase} w-full ${
     isMobile
-      ? "border border-[var(--border-gold)] bg-gold/10 px-4 py-2 text-sm font-semibold text-gold hover:bg-gold hover:text-background"
+      ? "min-h-11 border border-[var(--border-gold)] bg-gold/10 px-4 py-2.5 text-sm font-semibold text-gold hover:bg-gold hover:text-background"
       : "border border-[var(--border-gold)] bg-gold/10 px-2.5 py-1.5 text-xs font-semibold text-gold hover:bg-gold hover:text-background lg:px-3.5 lg:py-2 lg:text-sm"
   }`;
 
-  const enterWorldClass = `${btnBase} ${
+  const enterWorldClass = `${btnBase} w-full ${
     isMobile
-      ? "bg-gold px-4 py-2 text-sm font-semibold text-background hover:bg-gold-light"
+      ? "min-h-11 bg-gold px-4 py-2.5 text-sm font-semibold text-background hover:bg-gold-light"
       : "bg-gold px-2.5 py-1.5 text-xs font-semibold text-background hover:bg-gold-light lg:px-3.5 lg:py-2 lg:text-sm"
   }`;
 
   const profileClass = `${
     isMobile
-      ? `${btnBase} border border-border px-4 py-2 text-sm font-medium text-foreground hover:border-border-gold hover:text-gold`
+      ? `${btnBase} w-full min-h-11 border border-border px-4 py-2.5 text-sm font-medium text-foreground hover:border-border-gold hover:text-gold`
       : "shrink-0 whitespace-nowrap text-xs font-medium text-muted transition hover:text-gold lg:text-sm"
   }`;
 

@@ -92,6 +92,13 @@ export const enContent: SiteContent = {
       enterWorld: "Enter the World",
       enterWorldShort: "Enter",
     },
+    mobileMenu: {
+      open: "Open menu",
+      close: "Close menu",
+      navigation: "Navigation",
+      account: "Account",
+      language: "Language",
+    },
     footer: {
       product: [
         { href: "/game-hub", label: "Game Hub" },

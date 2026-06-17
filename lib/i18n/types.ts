@@ -122,6 +122,13 @@ export type SiteContent = {
       enterWorld: string;
       enterWorldShort: string;
     };
+    mobileMenu: {
+      open: string;
+      close: string;
+      navigation: string;
+      account: string;
+      language: string;
+    };
     footer: {
       product: NavLink[];
       legal: NavLink[];
