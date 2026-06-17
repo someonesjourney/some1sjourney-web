@@ -120,6 +120,7 @@ export type SiteContent = {
       signUp: string;
       myProfile: string;
       enterWorld: string;
+      enterWorldShort: string;
     };
     footer: {
       product: NavLink[];

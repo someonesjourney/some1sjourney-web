@@ -6,15 +6,13 @@ import { useEffect, useMemo, useState } from "react";
 import { GameHubNavMenu } from "@/components/layout/GameHubNavMenu";
 import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
 import { HeaderAuthButton } from "@/components/layout/HeaderAuthButton";
-import { useCta, useLocaleContext } from "@/components/providers/LocaleProvider";
+import { useLocaleContext } from "@/components/providers/LocaleProvider";
 import { localizeHref, type NavLink } from "@/lib/i18n";
 
 const LEFT_NAV_COUNT = 2;
 
 export function SiteHeader() {
   const { locale, content, navLinks } = useLocaleContext();
-  const cta = useCta();
-  const headerCta = cta("enterJourneyShort");
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -49,7 +47,7 @@ export function SiteHeader() {
       <Link
         key={link.href}
         href={link.href}
-        className="whitespace-nowrap text-sm text-muted transition hover:text-foreground"
+        className="whitespace-nowrap text-xs text-muted transition hover:text-foreground lg:text-sm"
         onClick={onNavigate}
       >
         {link.label}
@@ -65,70 +63,58 @@ export function SiteHeader() {
           : "bg-transparent"
       }`}
     >
-      <div className="mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 px-4 py-3 sm:gap-3 sm:px-6 sm:py-4">
-        <div className="flex items-center md:hidden">
+      <div className="mx-auto flex h-14 max-w-6xl items-center gap-2 px-4 sm:h-16 sm:gap-3 sm:px-6 lg:gap-4">
+        <div className="flex min-w-0 flex-1 items-center gap-2 md:gap-3 lg:gap-4">
           <button
             type="button"
-            className="inline-flex flex-col gap-1.5"
+            className="inline-flex shrink-0 flex-col gap-1.5 md:hidden"
             aria-label="Toggle menu"
             onClick={() => setMenuOpen((open) => !open)}
           >
-            <span className="block h-0.5 w-6 bg-foreground" />
-            <span className="block h-0.5 w-6 bg-foreground" />
+            <span className="block h-0.5 w-5 bg-foreground sm:w-6" />
+            <span className="block h-0.5 w-5 bg-foreground sm:w-6" />
           </button>
-        </div>
 
-        <nav
-          className="hidden items-center justify-end gap-3 md:flex lg:gap-4"
-          aria-label={locale === "ar" ? "التنقل الرئيسي" : "Primary navigation"}
-        >
-          {leftNavLinks.map((link) => renderNavLink(link))}
-        </nav>
+          <nav
+            className="hidden items-center gap-2 md:flex lg:gap-3 xl:gap-4"
+            aria-label={locale === "ar" ? "التنقل الرئيسي" : "Primary navigation"}
+          >
+            {leftNavLinks.map((link) => renderNavLink(link))}
+          </nav>
+        </div>
 
         <Link
           href={localizeHref(locale, "/")}
-          className="flex flex-col items-center justify-self-center"
+          className="flex shrink-0 flex-col items-center"
         >
           <Image
             src={content.assets.logo}
             alt={content.brand.name}
-            width={52}
-            height={52}
-            className="h-11 w-11 rounded-xl sm:h-12 sm:w-12 lg:h-[52px] lg:w-[52px]"
+            width={48}
+            height={48}
+            className="h-9 w-9 rounded-lg sm:h-10 sm:w-10 lg:h-12 lg:w-12 lg:rounded-xl"
             priority
           />
           <span className="sr-only">{content.brand.name}</span>
         </Link>
 
-        <div className="flex min-w-0 items-center justify-end gap-2 md:justify-start md:gap-3 lg:gap-4">
+        <div className="flex min-w-0 flex-1 items-center justify-end gap-1.5 sm:gap-2 lg:gap-3">
           <nav
-            className="hidden items-center gap-3 xl:flex xl:gap-4"
+            className="hidden items-center gap-2 lg:flex lg:gap-3 xl:gap-4"
             aria-label={locale === "ar" ? "استكشاف العالم" : "World navigation"}
           >
             {rightNavLinks.map((link) => renderNavLink(link))}
           </nav>
 
-          <div className="flex items-center gap-2 md:ms-auto md:gap-2.5 lg:gap-3">
-            <div className="hidden md:block">
-              <LanguageSwitcher />
-            </div>
-            <HeaderAuthButton />
-            <Link
-              href={headerCta.href}
-              className="hidden rounded-full bg-gold px-4 py-2 text-sm font-semibold text-background transition hover:bg-gold-light sm:inline-flex lg:px-5"
-            >
-              {headerCta.label}
-            </Link>
-            <div className="md:hidden">
-              <LanguageSwitcher />
-            </div>
-          </div>
+          <LanguageSwitcher className="hidden shrink-0 md:flex" />
+          <HeaderAuthButton />
+          <LanguageSwitcher className="shrink-0 md:hidden" />
         </div>
       </div>
 
       {menuOpen ? (
-        <div className="border-b border-border bg-background/95 px-6 py-4 md:hidden">
-          <div className="flex flex-col gap-4">
+        <div className="border-b border-border bg-background/95 px-4 py-4 sm:px-6 md:hidden">
+          <div className="flex flex-col gap-3">
             {navLinks.map((link) =>
               link.id === "game-hub" ? (
                 <GameHubNavMenu
@@ -149,14 +135,11 @@ export function SiteHeader() {
                 </Link>
               ),
             )}
-            <HeaderAuthButton onNavigate={() => setMenuOpen(false)} variant="mobile" />
-            <Link
-              href={headerCta.href}
-              className="rounded-full bg-gold px-5 py-2 text-center text-sm font-semibold text-background"
-              onClick={() => setMenuOpen(false)}
-            >
-              {headerCta.label}
-            </Link>
+            <LanguageSwitcher className="self-start" />
+            <HeaderAuthButton
+              onNavigate={() => setMenuOpen(false)}
+              variant="mobile"
+            />
           </div>
         </div>
       ) : null}

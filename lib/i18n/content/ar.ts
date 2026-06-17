@@ -90,6 +90,7 @@ export const arContent: SiteContent = {
       signUp: "إنشاء حساب",
       myProfile: "ملفي",
       enterWorld: "ادخل إلى العالم",
+      enterWorldShort: "ادخل",
     },
     footer: {
       product: [

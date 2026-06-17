@@ -90,6 +90,7 @@ export const enContent: SiteContent = {
       signUp: "Sign Up",
       myProfile: "My Profile",
       enterWorld: "Enter the World",
+      enterWorldShort: "Enter",
     },
     footer: {
       product: [
