@@ -19,7 +19,6 @@
 
 # production
 /build
-/public/app
 /.cache
 
 # misc

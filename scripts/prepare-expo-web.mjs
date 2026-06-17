@@ -6,8 +6,13 @@ import { fileURLToPath } from "node:url";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const webRoot = resolve(__dirname, "..");
 const targetDir = join(webRoot, "public", "app");
+const targetIndex = join(targetDir, "index.html");
 const localExpoDist = resolve(webRoot, "..", "expo", "dist");
 const cacheDir = join(webRoot, ".cache", "expo-src");
+
+function hasCommittedAppBundle() {
+  return existsSync(targetIndex);
+}
 
 function syncDist(sourceDist) {
   if (!existsSync(join(sourceDist, "index.html"))) {
@@ -32,10 +37,7 @@ function writeExpoEnv(expoRoot) {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
   if (!supabaseUrl || !supabaseKey) {
-    console.error(
-      "Missing Supabase env vars. Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY on Vercel.",
-    );
-    process.exit(1);
+    return false;
   }
 
   const lines = [
@@ -54,6 +56,7 @@ function writeExpoEnv(expoRoot) {
   }
 
   writeFileSync(join(expoRoot, ".env"), `${lines.join("\n")}\n`);
+  return true;
 }
 
 function buildExpoFromGit() {
@@ -83,7 +86,12 @@ function buildExpoFromGit() {
     { stdio: "inherit" },
   );
 
-  writeExpoEnv(cacheDir);
+  if (!writeExpoEnv(cacheDir)) {
+    console.error(
+      "Missing Supabase env vars. Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY on Vercel.",
+    );
+    process.exit(1);
+  }
 
   console.log("Installing Expo dependencies...");
   execSync("npm ci", { cwd: cacheDir, stdio: "inherit" });
@@ -104,8 +112,23 @@ function resolveExpoDist() {
     return localExpoDist;
   }
 
-  console.log("Sibling Expo export not found; building from GitHub...");
+  if (process.env.FORCE_EXPO_REBUILD === "1") {
+    console.log("FORCE_EXPO_REBUILD=1 — rebuilding Expo web from GitHub...");
+    return buildExpoFromGit();
+  }
+
+  if (hasCommittedAppBundle()) {
+    console.log("Using committed Expo web bundle at public/app");
+    return null;
+  }
+
+  console.log("No committed bundle; building Expo web from GitHub...");
   return buildExpoFromGit();
 }
 
-syncDist(resolveExpoDist());
+const sourceDist = resolveExpoDist();
+if (sourceDist) {
+  syncDist(sourceDist);
+} else {
+  console.log("Skipping sync — public/app is already present.");
+}
