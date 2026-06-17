@@ -6,44 +6,83 @@ import { useLocale } from "@/components/providers/LocaleProvider";
 import { getSiteContent, localizeHref } from "@/lib/i18n";
 import { getProfileSharePath } from "@/lib/user-profile";
 
-export function HeaderAuthButton({ onNavigate }: { onNavigate?: () => void }) {
+type HeaderAuthButtonProps = {
+  onNavigate?: () => void;
+  variant?: "desktop" | "mobile";
+};
+
+export function HeaderAuthButton({
+  onNavigate,
+  variant = "desktop",
+}: HeaderAuthButtonProps) {
   const locale = useLocale();
   const copy = getSiteContent(locale).navigation.auth;
   const { user, loading, configured } = useAuth();
 
+  const isMobile = variant === "mobile";
+  const containerClass = isMobile
+    ? "flex w-full flex-col gap-3"
+    : "hidden items-center gap-2 lg:flex";
+
+  const signInClass = isMobile
+    ? "rounded-full border border-border px-5 py-2 text-center text-sm font-medium text-foreground transition hover:border-border-gold hover:text-gold"
+    : "rounded-full border border-border px-4 py-2 text-sm font-medium text-foreground transition hover:border-border-gold hover:text-gold";
+
+  const signUpClass = isMobile
+    ? "rounded-full border border-[var(--border-gold)] bg-gold/10 px-5 py-2 text-center text-sm font-semibold text-gold transition hover:bg-gold hover:text-background"
+    : "rounded-full border border-[var(--border-gold)] bg-gold/10 px-4 py-2 text-sm font-semibold text-gold transition hover:bg-gold hover:text-background";
+
+  const profileClass = isMobile
+    ? "rounded-full border border-border px-5 py-2 text-center text-sm font-medium text-foreground transition hover:border-border-gold hover:text-gold"
+    : "rounded-full border border-border px-4 py-2 text-sm font-medium text-foreground transition hover:border-border-gold hover:text-gold";
+
   if (loading) {
     return (
-      <span className="hidden text-sm text-muted lg:inline" aria-hidden>
+      <span
+        className={isMobile ? "text-sm text-muted" : "hidden text-sm text-muted lg:inline"}
+        aria-hidden
+      >
         …
       </span>
     );
   }
 
-  const href = user?.id
-    ? localizeHref(locale, getProfileSharePath(user.id))
-    : localizeHref(locale, "/profile");
-
-  const label = user?.id ? copy.myProfile : copy.signIn;
-
-  if (!configured) {
+  if (user?.id) {
     return (
       <Link
-        href={localizeHref(locale, "/profile")}
+        href={localizeHref(locale, getProfileSharePath(user.id))}
         onClick={onNavigate}
-        className="hidden text-sm text-muted transition hover:text-gold lg:inline"
+        className={profileClass}
       >
-        {copy.signIn}
+        {copy.myProfile}
       </Link>
     );
   }
 
+  const signInHref = localizeHref(locale, "/profile");
+  const signUpHref = localizeHref(locale, "/profile?auth=sign-up");
+
+  if (!configured) {
+    return (
+      <div className={containerClass}>
+        <Link href={signInHref} onClick={onNavigate} className={signInClass}>
+          {copy.signIn}
+        </Link>
+        <Link href={signUpHref} onClick={onNavigate} className={signUpClass}>
+          {copy.signUp}
+        </Link>
+      </div>
+    );
+  }
+
   return (
-    <Link
-      href={href}
-      onClick={onNavigate}
-      className="hidden rounded-full border border-border px-4 py-2 text-sm font-medium text-foreground transition hover:border-border-gold hover:text-gold lg:inline-flex"
-    >
-      {label}
-    </Link>
+    <div className={containerClass}>
+      <Link href={signInHref} onClick={onNavigate} className={signInClass}>
+        {copy.signIn}
+      </Link>
+      <Link href={signUpHref} onClick={onNavigate} className={signUpClass}>
+        {copy.signUp}
+      </Link>
+    </div>
   );
 }

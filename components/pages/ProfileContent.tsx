@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useState, Suspense } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { ProfileAuthPanel } from "@/components/profile/ProfileAuthPanel";
 import { ProfileGameCard } from "@/components/profile/ProfileGameCard";
@@ -108,8 +108,33 @@ function ProfileEmptyState({
   copy: ReturnType<typeof getSiteContent>["profile"];
   locale: ReturnType<typeof useLocale>;
 }) {
+  return (
+    <Suspense
+      fallback={
+        <div className="mt-8 h-40 animate-pulse rounded-xl border border-border bg-surface/40" />
+      }
+    >
+      <ProfileEmptyStateContent copy={copy} locale={locale} />
+    </Suspense>
+  );
+}
+
+function ProfileEmptyStateContent({
+  copy,
+  locale,
+}: {
+  copy: ReturnType<typeof getSiteContent>["profile"];
+  locale: ReturnType<typeof useLocale>;
+}) {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [journeyId, setJourneyId] = useState("");
+
+  const authParam = searchParams.get("auth")?.toLowerCase();
+  const initialMode =
+    authParam === "sign-up" || authParam === "signup" || authParam === "register"
+      ? "signUp"
+      : "signIn";
 
   function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
@@ -134,7 +159,7 @@ function ProfileEmptyState({
         </h1>
         <p className="mt-4 text-muted">{copy.empty.description}</p>
 
-        <ProfileAuthPanel onSignedIn={handleSignedIn} />
+        <ProfileAuthPanel onSignedIn={handleSignedIn} initialMode={initialMode} />
 
         <p className="mt-8 text-xs font-semibold uppercase tracking-[0.15em] text-muted-dark">
           {copy.empty.divider}

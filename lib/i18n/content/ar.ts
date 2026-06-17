@@ -86,6 +86,7 @@ export const arContent: SiteContent = {
     ],
     auth: {
       signIn: "تسجيل الدخول",
+      signUp: "إنشاء حساب",
       myProfile: "ملفي",
     },
     footer: {

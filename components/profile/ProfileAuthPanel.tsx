@@ -16,6 +16,7 @@ const RESEND_COOLDOWN_SECONDS = 60;
 
 type ProfileAuthPanelProps = {
   onSignedIn?: () => void;
+  initialMode?: "signIn" | "signUp";
 };
 
 type FieldErrors = {
@@ -25,7 +26,10 @@ type FieldErrors = {
   confirmPassword?: string;
 };
 
-export function ProfileAuthPanel({ onSignedIn }: ProfileAuthPanelProps) {
+export function ProfileAuthPanel({
+  onSignedIn,
+  initialMode = "signIn",
+}: ProfileAuthPanelProps) {
   const locale = useLocale();
   const copy = getSiteContent(locale).profile.auth;
   const {
@@ -40,7 +44,7 @@ export function ProfileAuthPanel({ onSignedIn }: ProfileAuthPanelProps) {
   } = useAuth();
   const router = useRouter();
 
-  const [mode, setMode] = useState<"signIn" | "signUp">("signIn");
+  const [mode, setMode] = useState<"signIn" | "signUp">(initialMode);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -65,6 +69,10 @@ export function ProfileAuthPanel({ onSignedIn }: ProfileAuthPanelProps) {
     }, 1000);
     return () => window.clearInterval(timer);
   }, [resendCooldown]);
+
+  useEffect(() => {
+    setMode(initialMode);
+  }, [initialMode]);
 
   if (!configured) {
     return (

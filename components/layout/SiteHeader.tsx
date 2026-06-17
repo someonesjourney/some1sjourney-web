@@ -128,14 +128,7 @@ export function SiteHeader() {
                 </Link>
               ),
             )}
-            <HeaderAuthButton onNavigate={() => setMenuOpen(false)} />
-            <Link
-              href={localizeHref(locale, "/profile")}
-              className="text-sm text-gold"
-              onClick={() => setMenuOpen(false)}
-            >
-              {content.navigation.auth.signIn}
-            </Link>
+            <HeaderAuthButton onNavigate={() => setMenuOpen(false)} variant="mobile" />
             <Link
               href={headerCta.href}
               className="rounded-full bg-gold px-5 py-2 text-center text-sm font-semibold text-background"

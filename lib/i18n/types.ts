@@ -116,6 +116,7 @@ export type SiteContent = {
     header: NavLink[];
     auth: {
       signIn: string;
+      signUp: string;
       myProfile: string;
     };
     footer: {

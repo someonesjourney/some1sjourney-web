@@ -86,6 +86,7 @@ export const enContent: SiteContent = {
     ],
     auth: {
       signIn: "Sign In",
+      signUp: "Sign Up",
       myProfile: "My Profile",
     },
     footer: {
