@@ -49,13 +49,22 @@ export function HeaderAuthButton({
 
   if (user?.id) {
     return (
-      <Link
-        href={localizeHref(locale, getProfileSharePath(user.id))}
-        onClick={onNavigate}
-        className={profileClass}
-      >
-        {copy.myProfile}
-      </Link>
+      <div className={containerClass}>
+        <Link
+          href="/app"
+          onClick={onNavigate}
+          className={signUpClass}
+        >
+          {copy.enterWorld}
+        </Link>
+        <Link
+          href={localizeHref(locale, getProfileSharePath(user.id))}
+          onClick={onNavigate}
+          className={profileClass}
+        >
+          {copy.myProfile}
+        </Link>
+      </div>
     );
   }
 

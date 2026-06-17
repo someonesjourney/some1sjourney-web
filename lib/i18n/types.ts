@@ -22,6 +22,7 @@ export type CTA = {
 };
 
 export type CtaKey =
+  | "enterWorld"
   | "startJourney"
   | "enterJourney"
   | "enterJourneyShort"
@@ -118,6 +119,7 @@ export type SiteContent = {
       signIn: string;
       signUp: string;
       myProfile: string;
+      enterWorld: string;
     };
     footer: {
       product: NavLink[];

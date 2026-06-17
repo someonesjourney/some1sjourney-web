@@ -57,10 +57,11 @@ export const enContent: SiteContent = {
   },
 
   ctas: {
-    startJourney: { label: "Start Your Journey", href: "/download" },
-    enterJourney: { label: "Enter Your Journey", href: "/download" },
-    enterJourneyShort: { label: "Enter Journey", href: "/download" },
-    joinEarlyAccess: { label: "Join Early Access", href: "/download" },
+    enterWorld: { label: "Enter the World", href: "/app" },
+    startJourney: { label: "Enter the World", href: "/app" },
+    enterJourney: { label: "Enter Your Journey", href: "/app" },
+    enterJourneyShort: { label: "Enter Journey", href: "/app" },
+    joinEarlyAccess: { label: "Enter the World", href: "/app" },
     exploreSeasonOne: { label: "Explore Season One", href: "#season-one" },
     exploreCombat: { label: "Explore Combat", href: "/combat" },
     exploreGameHub: { label: "Explore Game Hub", href: "/game-hub" },
@@ -88,6 +89,7 @@ export const enContent: SiteContent = {
       signIn: "Sign In",
       signUp: "Sign Up",
       myProfile: "My Profile",
+      enterWorld: "Enter the World",
     },
     footer: {
       product: [
@@ -187,7 +189,7 @@ export const enContent: SiteContent = {
     label: "Season One",
     title: "Every Person Has A Journey",
     subtitle: "Discover your identity. Join your tribe. Evolve your future.",
-    primaryCta: "startJourney",
+    primaryCta: "enterWorld",
     secondaryCta: "exploreSeasonOne",
   },
 
@@ -410,13 +412,13 @@ export const enContent: SiteContent = {
       label: "Enter",
       title: "Enter the World",
       description:
-        "Early access is open. Your journey begins with a single scan.",
+        "Sign in on the website, then step into the living world in your browser.",
       steps: [
-        "Install Expo Go on your phone",
-        "Scan the QR code below",
-        "Start your journey in the world",
+        "Create an account or sign in from the header",
+        "Click Enter the World to open the web app",
+        "Continue your journey with the same identity",
       ],
-      primaryCta: "joinEarlyAccess" as const,
+      primaryCta: "enterWorld" as const,
       secondaryCta: "needHelp" as const,
     },
   },

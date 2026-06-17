@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "npm run sync:expo-web && next build",
+    "sync:expo-web": "node scripts/sync-expo-web.mjs",
     "start": "next start",
     "lint": "eslint"
   },

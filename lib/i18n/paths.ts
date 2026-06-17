@@ -5,7 +5,8 @@ export function localizeHref(locale: Locale, href: string): string {
   if (
     href.startsWith("mailto:") ||
     href.startsWith("http") ||
-    href.startsWith("exp://")
+    href.startsWith("exp://") ||
+    href.startsWith("/app")
   ) {
     return href;
   }

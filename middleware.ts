@@ -10,6 +10,8 @@ export async function middleware(request: NextRequest) {
     pathname.startsWith("/_next") ||
     pathname.startsWith("/images") ||
     pathname.startsWith("/auth") ||
+    pathname === "/app" ||
+    pathname.startsWith("/app/") ||
     pathname === "/sitemap.xml" ||
     pathname.includes(".")
   ) {

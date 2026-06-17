@@ -57,10 +57,11 @@ export const arContent: SiteContent = {
   },
 
   ctas: {
-    startJourney: { label: "ابدأ رحلتك", href: "/download" },
-    enterJourney: { label: "ادخل إلى رحلتك", href: "/download" },
-    enterJourneyShort: { label: "ادخل الرحلة", href: "/download" },
-    joinEarlyAccess: { label: "انضم للوصول المبكر", href: "/download" },
+    enterWorld: { label: "ادخل إلى العالم", href: "/app" },
+    startJourney: { label: "ادخل إلى العالم", href: "/app" },
+    enterJourney: { label: "ادخل إلى رحلتك", href: "/app" },
+    enterJourneyShort: { label: "ادخل الرحلة", href: "/app" },
+    joinEarlyAccess: { label: "ادخل إلى العالم", href: "/app" },
     exploreSeasonOne: { label: "استكشف الموسم الأول", href: "#season-one" },
     exploreCombat: { label: "استكشف القتال", href: "/combat" },
     exploreGameHub: { label: "استكشف مركز الألعاب", href: "/game-hub" },
@@ -88,6 +89,7 @@ export const arContent: SiteContent = {
       signIn: "تسجيل الدخول",
       signUp: "إنشاء حساب",
       myProfile: "ملفي",
+      enterWorld: "ادخل إلى العالم",
     },
     footer: {
       product: [
@@ -187,7 +189,7 @@ export const arContent: SiteContent = {
     label: "الموسم الأول",
     title: "لكلّ إنسانٍ رحلة",
     subtitle: "اكتشف هويتك. انضم إلى قبيلتك. تطوَّر نحو مستقبلك.",
-    primaryCta: "startJourney",
+    primaryCta: "enterWorld",
     secondaryCta: "exploreSeasonOne",
   },
 
@@ -410,13 +412,13 @@ export const arContent: SiteContent = {
       label: "ادخل",
       title: "ادخل إلى العالم",
       description:
-        "الوصول المبكر مفتوح. رحلتك تبدأ بمسح واحد.",
+        "سجّل دخولك في الموقع، ثم ادخل إلى العالم الحيّ من متصفّحك.",
       steps: [
-        "ثبّت Expo Go على هاتفك",
-        "امسح رمز QR أدناه",
-        "ابدأ رحلتك في العالم",
+        "أنشئ حسابًا أو سجّل الدخول من الشريط العلوي",
+        "اضغط «ادخل إلى العالم» لفتح تطبيق الويب",
+        "تابع رحلتك بنفس هويتك",
       ],
-      primaryCta: "joinEarlyAccess",
+      primaryCta: "enterWorld",
       secondaryCta: "needHelp",
     },
   },
