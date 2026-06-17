@@ -10,6 +10,40 @@ function extractNftNumericId(nftCardId: string): number | null {
   return Number.isFinite(parsed) ? parsed : null;
 }
 
+function isAllowedImageUrl(url: string): boolean {
+  if (url.startsWith("/")) {
+    return !url.startsWith("//");
+  }
+
+  try {
+    const parsed = new URL(url);
+    if (parsed.protocol !== "https:") {
+      return false;
+    }
+
+    const host = parsed.hostname.toLowerCase();
+    if (host === "res.cloudinary.com") {
+      return parsed.pathname.startsWith("/dooth0ops/");
+    }
+
+    if (host.endsWith(".supabase.co")) {
+      return true;
+    }
+
+    return false;
+  } catch {
+    return false;
+  }
+}
+
+function sanitizeImageUrl(url: string | null | undefined): string {
+  const trimmed = url?.trim();
+  if (!trimmed) {
+    return CARD_BACK_FALLBACK;
+  }
+  return isAllowedImageUrl(trimmed) ? trimmed : CARD_BACK_FALLBACK;
+}
+
 /** Resolve card image from Supabase catalog (same source as Expo). */
 export async function resolveCardImageUrl(
   supabase: SupabaseClient,
@@ -24,7 +58,7 @@ export async function resolveCardImageUrl(
   });
 
   if (typeof rpcUrl === "string" && rpcUrl.trim()) {
-    return rpcUrl.trim();
+    return sanitizeImageUrl(rpcUrl);
   }
 
   const { data: masterRow } = await supabase
@@ -34,7 +68,7 @@ export async function resolveCardImageUrl(
     .maybeSingle();
 
   if (masterRow?.image_url) {
-    return masterRow.image_url;
+    return sanitizeImageUrl(masterRow.image_url);
   }
 
   const numericId = extractNftNumericId(normalized);

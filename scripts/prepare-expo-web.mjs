@@ -37,7 +37,7 @@ function writeExpoEnv(expoRoot) {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
   if (!supabaseUrl || !supabaseKey) {
-    return false;
+    return null;
   }
 
   const lines = [
@@ -56,7 +56,28 @@ function writeExpoEnv(expoRoot) {
   }
 
   writeFileSync(join(expoRoot, ".env"), `${lines.join("\n")}\n`);
-  return true;
+  return lines;
+}
+
+function buildExpoExportEnv(envLines) {
+  const exportEnv = {
+    PATH: process.env.PATH,
+    NODE_ENV: process.env.NODE_ENV ?? "production",
+    HOME: process.env.HOME,
+    USERPROFILE: process.env.USERPROFILE,
+    SystemRoot: process.env.SystemRoot,
+    TEMP: process.env.TEMP,
+    TMP: process.env.TMP,
+    CI: process.env.CI,
+  };
+
+  for (const line of envLines) {
+    const separator = line.indexOf("=");
+    if (separator <= 0) continue;
+    exportEnv[line.slice(0, separator)] = line.slice(separator + 1);
+  }
+
+  return exportEnv;
 }
 
 function buildExpoFromGit() {
@@ -86,7 +107,8 @@ function buildExpoFromGit() {
     { stdio: "inherit" },
   );
 
-  if (!writeExpoEnv(cacheDir)) {
+  const expoEnvLines = writeExpoEnv(cacheDir);
+  if (!expoEnvLines) {
     console.error(
       "Missing Supabase env vars. Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY on Vercel.",
     );
@@ -100,7 +122,7 @@ function buildExpoFromGit() {
   execSync("npx expo export --platform web", {
     cwd: cacheDir,
     stdio: "inherit",
-    env: process.env,
+    env: buildExpoExportEnv(expoEnvLines),
   });
 
   return join(cacheDir, "dist");

@@ -66,7 +66,7 @@ export function GuideCardFan({
   className = "",
 }: GuideCardFanProps) {
   const rotations = [-12, 0, 12];
-  const offsets = ["translate-x-3", "translate-y-0", "-translate-x-3"];
+  const offsets = ["translate-x-3 rtl:-translate-x-3", "translate-y-0", "-translate-x-3 rtl:translate-x-3"];
 
   return (
     <div className={`flex flex-col items-center ${className}`}>
@@ -78,7 +78,7 @@ export function GuideCardFan({
             style={{
               transform: `rotate(${rotations[index] ?? 0}deg)`,
               zIndex: index + 1,
-              left: `${18 + index * 22}%`,
+              insetInlineStart: `${18 + index * 22}%`,
             }}
           >
             <IdentityCard
@@ -263,7 +263,7 @@ export function FeatureSliderCards({
             key={card.id}
             className="absolute w-[40%]"
             style={{
-              left: `${14 + index * 23}%`,
+              insetInlineStart: `${14 + index * 23}%`,
               bottom: 0,
               zIndex: index + 1,
               transform: `rotate(${rotations[index] ?? 0}deg)`,

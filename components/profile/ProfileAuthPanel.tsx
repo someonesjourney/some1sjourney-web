@@ -363,7 +363,7 @@ export function ProfileAuthPanel({
             setFieldErrors({});
             setError(null);
           }}
-          className={`rounded-full px-4 py-1.5 text-xs font-medium transition ${
+            className={`rounded-full px-4 py-2 text-xs font-medium transition min-h-11 sm:min-h-0 sm:py-1.5 ${
             mode === "signIn"
               ? "bg-gold text-background"
               : "border border-border text-muted hover:text-foreground"
@@ -378,7 +378,7 @@ export function ProfileAuthPanel({
             setFieldErrors({});
             setError(null);
           }}
-          className={`rounded-full px-4 py-1.5 text-xs font-medium transition ${
+            className={`rounded-full px-4 py-2 text-xs font-medium transition min-h-11 sm:min-h-0 sm:py-1.5 ${
             mode === "signUp"
               ? "bg-gold text-background"
               : "border border-border text-muted hover:text-foreground"

@@ -17,7 +17,7 @@ export function LanguageSwitcher({ className = "" }: { className?: string }) {
           <Link
             key={code}
             href={switchLocalePath(pathname, code as Locale)}
-            className={`rounded-full px-2 py-0.5 text-[11px] font-medium transition sm:px-2.5 sm:py-1 sm:text-xs ${
+            className={`inline-flex min-h-11 min-w-11 items-center justify-center rounded-full px-3 py-2 text-xs font-medium transition sm:min-h-0 sm:min-w-0 sm:px-2.5 sm:py-1 sm:text-xs ${
               active
                 ? "bg-gold text-background"
                 : "text-muted hover:text-foreground"

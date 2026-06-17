@@ -1,7 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useLayoutEffect, useState } from "react";
+import {
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type RefObject,
+} from "react";
 import { GameHubNavMenu } from "@/components/layout/GameHubNavMenu";
 import { HeaderAuthButton } from "@/components/layout/HeaderAuthButton";
 import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
@@ -12,6 +18,7 @@ type MobileNavDrawerProps = {
   open: boolean;
   onClose: () => void;
   navLinks: NavLink[];
+  menuButtonRef?: RefObject<HTMLButtonElement | null>;
 };
 
 const PANEL_WIDTH = "min(88vw, 20rem)";
@@ -26,11 +33,14 @@ export function MobileNavDrawer({
   open,
   onClose,
   navLinks,
+  menuButtonRef,
 }: MobileNavDrawerProps) {
   const { locale, content } = useLocaleContext();
   const copy = content.navigation.mobileMenu;
   const [mounted, setMounted] = useState(false);
   const [visible, setVisible] = useState(false);
+  const panelRef = useRef<HTMLElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
 
   useLayoutEffect(() => {
     if (open) {
@@ -45,13 +55,36 @@ export function MobileNavDrawer({
   }, [open]);
 
   useEffect(() => {
-    if (!open) return;
+    if (!open || !visible) return;
+
+    closeButtonRef.current?.focus();
 
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
 
     function onKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape") onClose();
+      if (event.key === "Escape") {
+        onClose();
+        return;
+      }
+
+      if (event.key !== "Tab" || !panelRef.current) return;
+
+      const focusable = panelRef.current.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
+      );
+      if (focusable.length === 0) return;
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
     }
 
     window.addEventListener("keydown", onKeyDown);
@@ -59,7 +92,12 @@ export function MobileNavDrawer({
       document.body.style.overflow = previousOverflow;
       window.removeEventListener("keydown", onKeyDown);
     };
-  }, [open, onClose]);
+  }, [open, visible, onClose]);
+
+  useEffect(() => {
+    if (open || !menuButtonRef?.current) return;
+    menuButtonRef.current.focus();
+  }, [open, menuButtonRef]);
 
   if (!open && !mounted) {
     return null;
@@ -67,7 +105,7 @@ export function MobileNavDrawer({
 
   return (
     <div
-      className="fixed inset-0 z-[60] md:hidden"
+      className="fixed inset-0 z-[60] lg:hidden"
       aria-hidden={!open}
     >
       <button
@@ -81,17 +119,18 @@ export function MobileNavDrawer({
       />
 
       <aside
+        ref={panelRef}
         role="dialog"
         aria-modal="true"
         aria-label={copy.navigation}
         style={{ width: PANEL_WIDTH }}
-        className={`fixed inset-y-0 start-0 z-[61] flex flex-col border-e border-border bg-background shadow-2xl transition-transform duration-300 ease-out ${
+        className={`fixed inset-y-0 start-0 z-[61] flex flex-col border-e border-border bg-background pb-[env(safe-area-inset-bottom,0px)] shadow-2xl transition-transform duration-300 ease-out ${
           visible
             ? "translate-x-0"
             : "-translate-x-full rtl:translate-x-full"
         }`}
       >
-        <div className="flex items-center justify-between gap-3 border-b border-border px-4 py-4">
+        <div className="flex items-center justify-between gap-3 border-b border-border px-4 py-4 pt-[max(1rem,env(safe-area-inset-top,0px))]">
           <div className="min-w-0 text-start">
             <p
               className={
@@ -105,8 +144,9 @@ export function MobileNavDrawer({
             <p className="mt-0.5 text-sm text-muted">{copy.navigation}</p>
           </div>
           <button
+            ref={closeButtonRef}
             type="button"
-            className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-border text-muted transition hover:border-border-gold hover:text-foreground"
+            className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-border text-muted transition hover:border-border-gold hover:text-foreground"
             aria-label={copy.close}
             onClick={onClose}
           >

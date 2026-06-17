@@ -53,7 +53,7 @@ export function GameHubNavMenu({
           </Link>
           <button
             type="button"
-            className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-muted transition hover:bg-surface/80 hover:text-foreground"
+            className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-lg text-muted transition hover:bg-surface/80 hover:text-foreground"
             aria-expanded={open}
             aria-label={label}
             onClick={() => setOpen((value) => !value)}
@@ -114,7 +114,7 @@ export function GameHubNavMenu({
           open
             ? "pointer-events-auto visible translate-y-0 opacity-100"
             : "pointer-events-none invisible -translate-y-1 opacity-0"
-        } ${locale === "ar" ? "right-0" : "left-0"}`}
+        } start-0`}
         onMouseLeave={() => setOpen(false)}
       >
         <div className="mb-3 flex items-center justify-between gap-3">
@@ -129,7 +129,8 @@ export function GameHubNavMenu({
               onNavigate?.();
             }}
           >
-            {label} →
+            {label}{" "}
+            <span aria-hidden>{locale === "ar" ? "←" : "→"}</span>
           </Link>
         </div>
 

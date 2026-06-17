@@ -280,7 +280,8 @@ function ProfileView({
               {profile.name}
             </h1>
             <p className="mt-2 text-sm text-muted">
-              {copy.journeyId}: <span className="text-foreground">{profile.id}</span>
+              {copy.journeyId}:{" "}
+              <span className="break-all text-foreground">{profile.id}</span>
             </p>
           </div>
           <div className="flex flex-wrap gap-3">
@@ -434,7 +435,8 @@ function ProfileView({
                 href={localizeHref(locale, "/download")}
                 className="mt-4 inline-flex text-sm text-gold hover:text-gold-light"
               >
-                {getSiteContent(locale).ctas.enterJourney.label} →
+                {getSiteContent(locale).ctas.enterJourney.label}{" "}
+                <span aria-hidden>{locale === "ar" ? "←" : "→"}</span>
               </Link>
             </motion.div>
           </div>

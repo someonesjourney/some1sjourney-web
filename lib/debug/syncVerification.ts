@@ -13,5 +13,7 @@ export function logSyncVerification(
   payload: SyncVerificationPayload,
 ): void {
   if (!isSyncDebugEnabled()) return;
-  console.log(`[SYNC_VERIFY:web:${scope}]`, payload);
+
+  const { email: _email, ...safePayload } = payload;
+  console.log(`[SYNC_VERIFY:web:${scope}]`, safePayload);
 }

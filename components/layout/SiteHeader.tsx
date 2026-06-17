@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { GameHubNavMenu } from "@/components/layout/GameHubNavMenu";
 import { HeaderAuthButton } from "@/components/layout/HeaderAuthButton";
 import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
@@ -17,6 +17,7 @@ export function SiteHeader() {
   const menuCopy = content.navigation.mobileMenu;
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
 
   const { leftNavLinks, rightNavLinks } = useMemo(() => {
     return {
@@ -36,7 +37,7 @@ export function SiteHeader() {
     if (!menuOpen) return;
 
     function onResize() {
-      if (window.matchMedia("(min-width: 768px)").matches) {
+      if (window.matchMedia("(min-width: 1024px)").matches) {
         setMenuOpen(false);
       }
     }
@@ -76,17 +77,18 @@ export function SiteHeader() {
   return (
     <>
       <header
-        className={`fixed inset-x-0 top-0 z-50 transition duration-300 ${
+        className={`fixed inset-x-0 top-0 z-50 pt-[env(safe-area-inset-top,0px)] transition duration-300 ${
           scrolled
             ? "border-b border-border bg-background/80 backdrop-blur-md"
             : "bg-transparent"
         }`}
       >
         <div className="mx-auto flex h-14 max-w-6xl items-center gap-2 px-4 sm:h-16 sm:gap-3 sm:px-6 lg:gap-4">
-          <div className="flex min-w-0 flex-1 items-center gap-2 md:gap-3 lg:gap-4">
+          <div className="flex min-w-0 flex-1 items-center gap-2 lg:gap-4">
             <button
+              ref={menuButtonRef}
               type="button"
-              className="relative inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-border/80 bg-background/40 md:hidden"
+              className="relative inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-border/80 bg-background/40 lg:hidden"
               aria-label={menuOpen ? menuCopy.close : menuCopy.open}
               aria-expanded={menuOpen}
               onClick={toggleMenu}
@@ -109,7 +111,7 @@ export function SiteHeader() {
             </button>
 
             <nav
-              className="hidden items-center gap-2 md:flex lg:gap-3 xl:gap-4"
+              className="hidden items-center gap-2 lg:flex lg:gap-3 xl:gap-4"
               aria-label={locale === "ar" ? "التنقل الرئيسي" : "Primary navigation"}
             >
               {leftNavLinks.map((link) => renderNavLink(link))}
@@ -143,7 +145,7 @@ export function SiteHeader() {
             <LanguageSwitcher className="hidden shrink-0 md:flex" />
             <HeaderAuthButton />
             {/* Balance centered logo against the mobile menu button */}
-            <div className="w-10 shrink-0 md:hidden" aria-hidden />
+            <div className="w-11 shrink-0 lg:hidden" aria-hidden />
           </div>
         </div>
       </header>
@@ -152,6 +154,7 @@ export function SiteHeader() {
         open={menuOpen}
         onClose={closeMenu}
         navLinks={navLinks}
+        menuButtonRef={menuButtonRef}
       />
     </>
   );

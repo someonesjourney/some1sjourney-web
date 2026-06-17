@@ -1,12 +1,19 @@
 import { NextResponse } from "next/server";
+import { defaultLocale } from "@/lib/i18n";
+import {
+  localeFromRedirectPath,
+  profilePathForUser,
+  safeRedirectPath,
+} from "@/lib/safeRedirectPath";
+import { logSyncVerification } from "@/lib/debug/syncVerification";
 import { createClient } from "@/lib/supabase/server";
 import { syncUnifiedBackendUser } from "@/lib/supabase/sync-unified-user";
-import { logSyncVerification } from "@/lib/debug/syncVerification";
 
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
   const code = searchParams.get("code");
-  const next = searchParams.get("next") ?? "/en/profile";
+  const fallback = `/${defaultLocale}/profile`;
+  const next = safeRedirectPath(searchParams.get("next"), fallback);
 
   if (code) {
     const supabase = await createClient();
@@ -14,7 +21,7 @@ export async function GET(request: Request) {
 
     if (error) {
       console.error("[auth/callback] exchangeCodeForSession:", error.message);
-      return NextResponse.redirect(`${origin}/en/profile?auth_error=1`);
+      return NextResponse.redirect(`${origin}${fallback}?auth_error=1`);
     }
 
     const user = data.user;
@@ -25,14 +32,15 @@ export async function GET(request: Request) {
 
       logSyncVerification("auth_callback", {
         userId: user.id,
-        email: user.email,
       });
 
       await syncUnifiedBackendUser(supabase, user.id, displayName);
 
+      const locale =
+        localeFromRedirectPath(next) ?? defaultLocale;
       const profilePath = next.includes("/profile/")
-        ? next
-        : `/en/profile/${user.id}`;
+        ? safeRedirectPath(next, profilePathForUser(user.id, locale))
+        : profilePathForUser(user.id, locale);
 
       return NextResponse.redirect(`${origin}${profilePath}`);
     }
