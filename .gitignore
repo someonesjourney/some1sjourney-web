@@ -20,6 +20,7 @@
 # production
 /build
 /public/app
+/.cache
 
 # misc
 .DS_Store
