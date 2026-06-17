@@ -1,18 +1,20 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { GameHubNavMenu } from "@/components/layout/GameHubNavMenu";
 import { HeaderAuthButton } from "@/components/layout/HeaderAuthButton";
 import { LanguageSwitcher } from "@/components/layout/LanguageSwitcher";
 import { useLocaleContext } from "@/components/providers/LocaleProvider";
-import { localeDirection, type Locale, type NavLink } from "@/lib/i18n";
+import type { Locale, NavLink } from "@/lib/i18n";
 
 type MobileNavDrawerProps = {
   open: boolean;
   onClose: () => void;
   navLinks: NavLink[];
 };
+
+const PANEL_WIDTH = "min(88vw, 20rem)";
 
 function sectionLabelClass(locale: Locale) {
   return locale === "ar"
@@ -27,8 +29,20 @@ export function MobileNavDrawer({
 }: MobileNavDrawerProps) {
   const { locale, content } = useLocaleContext();
   const copy = content.navigation.mobileMenu;
-  const isRtl = localeDirection(locale) === "rtl";
-  const slideClosed = isRtl ? "translate-x-full" : "-translate-x-full";
+  const [mounted, setMounted] = useState(false);
+  const [visible, setVisible] = useState(false);
+
+  useLayoutEffect(() => {
+    if (open) {
+      setMounted(true);
+      const frame = requestAnimationFrame(() => setVisible(true));
+      return () => cancelAnimationFrame(frame);
+    }
+
+    setVisible(false);
+    const timeout = window.setTimeout(() => setMounted(false), 300);
+    return () => window.clearTimeout(timeout);
+  }, [open]);
 
   useEffect(() => {
     if (!open) return;
@@ -47,15 +61,19 @@ export function MobileNavDrawer({
     };
   }, [open, onClose]);
 
+  if (!open && !mounted) {
+    return null;
+  }
+
   return (
     <div
-      className={`fixed inset-0 z-[60] md:hidden ${open ? "pointer-events-auto" : "pointer-events-none"}`}
+      className="fixed inset-0 z-[60] md:hidden"
       aria-hidden={!open}
     >
       <button
         type="button"
         className={`absolute inset-0 bg-background/70 backdrop-blur-sm transition-opacity duration-300 ${
-          open ? "opacity-100" : "opacity-0"
+          visible ? "opacity-100" : "opacity-0"
         }`}
         aria-label={copy.close}
         tabIndex={open ? 0 : -1}
@@ -66,9 +84,11 @@ export function MobileNavDrawer({
         role="dialog"
         aria-modal="true"
         aria-label={copy.navigation}
-        dir={isRtl ? "rtl" : "ltr"}
-        className={`absolute inset-y-0 start-0 flex w-[min(88vw,20rem)] flex-col border-e border-border bg-background shadow-2xl transition-transform duration-300 ease-out ${
-          open ? "translate-x-0" : slideClosed
+        style={{ width: PANEL_WIDTH }}
+        className={`fixed inset-y-0 start-0 z-[61] flex flex-col border-e border-border bg-background shadow-2xl transition-transform duration-300 ease-out ${
+          visible
+            ? "translate-x-0"
+            : "-translate-x-full rtl:translate-x-full"
         }`}
       >
         <div className="flex items-center justify-between gap-3 border-b border-border px-4 py-4">

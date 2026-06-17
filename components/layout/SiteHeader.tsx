@@ -45,6 +45,9 @@ export function SiteHeader() {
     return () => window.removeEventListener("resize", onResize);
   }, [menuOpen]);
 
+  const closeMenu = () => setMenuOpen(false);
+  const toggleMenu = () => setMenuOpen((open) => !open);
+
   function renderNavLink(link: NavLink, onNavigate?: () => void) {
     if (link.id === "game-hub") {
       return (
@@ -86,7 +89,7 @@ export function SiteHeader() {
               className="relative inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-border/80 bg-background/40 md:hidden"
               aria-label={menuOpen ? menuCopy.close : menuCopy.open}
               aria-expanded={menuOpen}
-              onClick={() => setMenuOpen((open) => !open)}
+              onClick={toggleMenu}
             >
               <span
                 className={`absolute block h-0.5 w-4 bg-foreground transition duration-200 ${
@@ -116,7 +119,7 @@ export function SiteHeader() {
           <Link
             href={localizeHref(locale, "/")}
             className="flex shrink-0 flex-col items-center"
-            onClick={() => setMenuOpen(false)}
+            onClick={closeMenu}
           >
             <Image
               src={content.assets.logo}
@@ -147,7 +150,7 @@ export function SiteHeader() {
 
       <MobileNavDrawer
         open={menuOpen}
-        onClose={() => setMenuOpen(false)}
+        onClose={closeMenu}
         navLinks={navLinks}
       />
     </>
