@@ -1,26 +1,100 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #0a0a12;
+  --background-secondary: #12121e;
+  --surface: #1a1a2e;
+  --surface-light: #22223a;
+  --foreground: #ffffff;
+  --muted: #9ca3af;
+  --muted-dark: #6b7280;
+  --accent: #7b2ff7;
+  --accent-light: #9b5ffa;
+  --gold: #d4af37;
+  --gold-light: #e8c94b;
+  --border: rgba(255, 255, 255, 0.08);
+  --border-gold: rgba(212, 175, 55, 0.25);
 }
 
 @theme inline {
   --color-background: var(--background);
+  --color-background-secondary: var(--background-secondary);
+  --color-surface: var(--surface);
+  --color-surface-light: var(--surface-light);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-muted: var(--muted);
+  --color-muted-dark: var(--muted-dark);
+  --color-accent: var(--accent);
+  --color-accent-light: var(--accent-light);
+  --color-gold: var(--gold);
+  --color-gold-light: var(--gold-light);
+  --color-border: var(--border);
+  --color-border-gold: var(--border-gold);
+  --font-sans: var(--font-inter);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter), system-ui, sans-serif;
+}
+
+.font-arabic {
+  font-family: var(--font-arabic), var(--font-inter), system-ui, sans-serif;
+}
+
+[dir="rtl"] .prose-legal ul {
+  padding-right: 1.25rem;
+  padding-left: 0;
+}
+
+[dir="rtl"] .prose-legal li {
+  text-align: right;
+}
+
+::selection {
+  background: rgba(123, 47, 247, 0.35);
+  color: #ffffff;
+}
+
+.prose-legal h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--foreground);
+  margin-top: 2.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.prose-legal p,
+.prose-legal li {
+  color: var(--muted);
+  line-height: 1.75;
+}
+
+.prose-legal ul {
+  list-style: disc;
+  padding-left: 1.25rem;
+  margin-top: 0.75rem;
+}
+
+.prose-legal li + li {
+  margin-top: 0.5rem;
+}
+
+.gradient-orb {
+  background: radial-gradient(circle, rgba(123, 47, 247, 0.18) 0%, transparent 70%);
+}
+
+.gradient-orb-gold {
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.12) 0%, transparent 70%);
 }
