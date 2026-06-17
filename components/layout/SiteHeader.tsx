@@ -139,6 +139,8 @@ export function SiteHeader() {
 
             <LanguageSwitcher className="hidden shrink-0 md:flex" />
             <HeaderAuthButton />
+            {/* Balance centered logo against the mobile menu button */}
+            <div className="w-10 shrink-0 md:hidden" aria-hidden />
           </div>
         </div>
       </header>

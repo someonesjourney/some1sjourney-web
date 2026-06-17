@@ -29,25 +29,25 @@ export function HeaderAuthButton({
 
   const signInClass = `${btnBase} w-full ${
     isMobile
-      ? "min-h-11 border border-border px-4 py-2.5 text-sm font-medium text-foreground hover:border-border-gold hover:text-gold"
+      ? "min-h-11 border border-border px-4 py-2.5 text-center text-sm font-medium text-foreground hover:border-border-gold hover:text-gold"
       : "border border-border px-2.5 py-1.5 text-xs font-medium text-foreground hover:border-border-gold hover:text-gold lg:px-3.5 lg:py-2 lg:text-sm"
   }`;
 
   const signUpClass = `${btnBase} w-full ${
     isMobile
-      ? "min-h-11 border border-[var(--border-gold)] bg-gold/10 px-4 py-2.5 text-sm font-semibold text-gold hover:bg-gold hover:text-background"
+      ? "min-h-11 border border-[var(--border-gold)] bg-gold/10 px-4 py-2.5 text-center text-sm font-semibold text-gold hover:bg-gold hover:text-background"
       : "border border-[var(--border-gold)] bg-gold/10 px-2.5 py-1.5 text-xs font-semibold text-gold hover:bg-gold hover:text-background lg:px-3.5 lg:py-2 lg:text-sm"
   }`;
 
   const enterWorldClass = `${btnBase} w-full ${
     isMobile
-      ? "min-h-11 bg-gold px-4 py-2.5 text-sm font-semibold text-background hover:bg-gold-light"
+      ? "min-h-11 bg-gold px-4 py-2.5 text-center text-sm font-semibold text-background hover:bg-gold-light"
       : "bg-gold px-2.5 py-1.5 text-xs font-semibold text-background hover:bg-gold-light lg:px-3.5 lg:py-2 lg:text-sm"
   }`;
 
   const profileClass = `${
     isMobile
-      ? `${btnBase} w-full min-h-11 border border-border px-4 py-2.5 text-sm font-medium text-foreground hover:border-border-gold hover:text-gold`
+      ? `${btnBase} w-full min-h-11 border border-border px-4 py-2.5 text-center text-sm font-medium text-foreground hover:border-border-gold hover:text-gold`
       : "shrink-0 whitespace-nowrap text-xs font-medium text-muted transition hover:text-gold lg:text-sm"
   }`;
 
@@ -66,7 +66,7 @@ export function HeaderAuthButton({
     return (
       <div className={shellClass}>
         <Link href="/app" onClick={onNavigate} className={enterWorldClass}>
-          {isMobile ? copy.enterWorld : copy.enterWorldShort}
+          {copy.enterWorldShort}
         </Link>
         <Link
           href={localizeHref(locale, getProfileSharePath(user.id))}

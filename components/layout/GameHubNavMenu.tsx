@@ -39,42 +39,58 @@ export function GameHubNavMenu({
   }, [open, variant]);
 
   if (variant === "mobile") {
+    const chevron = open ? "▴" : "▾";
+
     return (
       <div className="overflow-hidden rounded-xl border border-border/80 bg-surface/30">
-        <Link
-          href={hubHref}
-          className="flex min-h-11 items-center justify-between px-3 text-sm font-semibold text-gold transition hover:bg-surface/80"
-          onClick={onNavigate}
-        >
-          {label}
-          <span aria-hidden>{locale === "ar" ? "←" : "→"}</span>
-        </Link>
-        <div className="space-y-2 border-t border-border/60 px-3 py-3">
-          {games.map((game) => (
-            <div
-              key={game.id}
-              className="rounded-lg bg-background/60 px-3 py-2.5"
-            >
-              <p className="text-sm font-medium text-foreground">{game.title}</p>
-              <p className="mt-1 text-xs leading-relaxed text-muted">
-                {game.summary}
-              </p>
-              {game.href ? (
-                <Link
-                  href={game.href}
-                  className="mt-2 inline-flex text-xs font-semibold text-gold"
-                  onClick={onNavigate}
-                >
-                  {game.cta ?? gameHub.viewCombatGuide} →
-                </Link>
-              ) : (
-                <span className="mt-2 inline-flex text-[10px] uppercase tracking-wide text-muted-dark">
-                  {gameHub.inAppBadge}
-                </span>
-              )}
-            </div>
-          ))}
+        <div className="flex min-h-11 items-center gap-2 px-2">
+          <Link
+            href={hubHref}
+            className="flex min-w-0 flex-1 items-center px-1 text-start text-sm font-semibold text-gold transition hover:text-gold-light"
+            onClick={onNavigate}
+          >
+            {label}
+          </Link>
+          <button
+            type="button"
+            className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-muted transition hover:bg-surface/80 hover:text-foreground"
+            aria-expanded={open}
+            aria-label={label}
+            onClick={() => setOpen((value) => !value)}
+          >
+            <span className="text-xs">{chevron}</span>
+          </button>
         </div>
+
+        {open ? (
+          <div className="space-y-2 border-t border-border/60 px-3 py-3">
+            {games.map((game) => (
+              <div
+                key={game.id}
+                className="rounded-lg bg-background/60 px-3 py-2.5 text-start"
+              >
+                <p className="text-sm font-medium text-foreground">{game.title}</p>
+                <p className="mt-1 text-xs leading-relaxed text-muted">
+                  {game.summary}
+                </p>
+                {game.href ? (
+                  <Link
+                    href={game.href}
+                    className="mt-2 inline-flex text-xs font-semibold text-gold"
+                    onClick={onNavigate}
+                  >
+                    {game.cta ?? gameHub.viewCombatGuide}{" "}
+                    <span aria-hidden>{locale === "ar" ? "←" : "→"}</span>
+                  </Link>
+                ) : (
+                  <span className="mt-2 inline-flex text-[10px] text-muted-dark">
+                    {gameHub.inAppBadge}
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
+        ) : null}
       </div>
     );
   }
